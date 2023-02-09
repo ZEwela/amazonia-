@@ -32,10 +32,6 @@ body{
   font-weight: bold;
   text-decoration: none;
 }
-.header-links{
-  display: flex;
-  justify-content: space-between;
-}
 .header-links a{
   color: #ffffff;
   text-decoration: none;
