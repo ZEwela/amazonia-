@@ -1,6 +1,7 @@
-export default {
+const data = {
     products: [
-        {
+        {   
+            _id:'1',
             name: 'Slim Shirt',
             category: 'Shirts',
             image:'/images/d1.jpg',
@@ -10,6 +11,7 @@ export default {
             numReviews: 10
         },
         {
+            _id:'2',
             name: 'Fit Shirt',
             category: 'Shirts',
             image:'/images/d1.jpg',
@@ -19,6 +21,7 @@ export default {
             numReviews: 11
         },
         {
+            _id:'3',
             name: 'Fit Pants',
             category: 'Pants',
             image:'/images/d1.jpg',
@@ -28,6 +31,7 @@ export default {
             numReviews: 0
         },
         {
+            _id:'4',
             name: 'Best Pants',
             category: 'Pants',
             image:'/images/d1.jpg',
@@ -38,3 +42,5 @@ export default {
         },
     ]
 }
+
+export default data;
