@@ -1,13 +1,20 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import data from '../data';
+import { useParams, Link, useLocation } from 'react-router-dom';
+
 
 
 function ProductScreen(props) {
     const { id } = useParams();
-    const product = data.products.find(x=> x._id === id);
+    const location = useLocation();
+    const product = location.state?.product;
 
+    // const [products, setProducts] = useState([]);
+    // const [error, setError] = useState();
 
+    if (product === undefined) {
+
+        return <div>Product not found</div>
+    }
 
     return <div>
         <div className='back-to-result'>
