@@ -26,7 +26,7 @@ function HomeScreen(props) {
                         <div className="product">
                             <img  className="product-image" src={product.image} alt="product"/>
                             <div className="product-name">
-                                <Link to={`/products/${product._id}`} state={{product: product}}>{product.name}</Link>
+                                <Link to={`/products/${product._id}`}>{product.name}</Link>
                             </div>
                             <div className="product-brand">{product.brand}</div>
                             <div className="product-price">${product.price}</div>
