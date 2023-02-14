@@ -1,6 +1,7 @@
 import {React, useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { addToCart } from '../reducers/cartReducer';
 import {fetchProductById} from '../reducers/productReducers';
 
 
@@ -26,8 +27,9 @@ function ProductScreen(props) {
         return (qty > 30)? 30:qty;
     } 
 
-    const handleAddToCart = () => {
-       navigate(`/cart/${id}?qty=${qty}`);
+    const handleAddToCart = (id, qty) => {
+        dispatch(addToCart({id, qty}))
+       navigate('/cart/');
     }
 
     return <div>
@@ -77,7 +79,7 @@ function ProductScreen(props) {
                             </select>
                         </li>
                         <li>
-                            {product.countInStock > 0 && <button onClick={handleAddToCart} className="button primary">Add to cart</button>}
+                            {product.countInStock > 0 && <button onClick={() => handleAddToCart(product._id, qty)} className="button primary">Add to cart</button>}
                         </li>
                     </ul>
                 </div>

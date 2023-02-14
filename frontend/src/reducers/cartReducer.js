@@ -1,10 +1,8 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
-import axios from "axios"
-
+import axios from "axios";
 
 
 export const addToCart = createAsyncThunk('cart/addToCart', async(args) => {
-
     const {id, qty} = args;
     const {data}= await axios.get(`/api/products/${id}`);
 
@@ -40,6 +38,9 @@ const cartSlice = createSlice({
             const item = current(state).cartItems.findIndex(x => x.product === action.payload);
             state.cartItems[item].qty--;
         },
+        setCartFromCookie: (state, action) => {
+            state.cartItems = action.payload
+        },
     },
     extraReducers: builder => {
         builder.addCase(addToCart.pending, state => {
@@ -64,4 +65,4 @@ const cartSlice = createSlice({
 })
 
 export default cartSlice.reducer;
-export const {removeFromCart, addQuantity, substractQuantity} = cartSlice.actions;
+export const {removeFromCart, addQuantity, substractQuantity, setCartFromCookie} = cartSlice.actions;

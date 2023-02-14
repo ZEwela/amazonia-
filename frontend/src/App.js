@@ -1,20 +1,35 @@
-import React from 'react';
+import {React, useEffect} from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
 import './App.css';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
+import { useCookies } from 'react-cookie';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCartFromCookie } from './reducers/cartReducer';
+
 
 function App() {
+  const dispatch = useDispatch();
   const openMenu = () => {
     document.querySelector(".sidebar").classList.add("open");
   }
   const closeMenu = () => {
     document.querySelector(".sidebar").classList.remove("open");
   }
+  
+  const cartItems = useSelector(state => state.cart.cartItems);
+  const [cookies, setCookie] = useCookies(['cart']);
+
+  useEffect(() => {
+    if (cartItems.length === 0 && cookies.cart !== undefined) {
+        dispatch(setCartFromCookie(cookies.cart))
+    } else {
+        setCookie('cart', cartItems);
+    }
+  }, [cartItems]);
 
   return (
-
         <div className="grid-container">
             <header className="header">
                 <div className="brand">

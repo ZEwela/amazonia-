@@ -1,18 +1,18 @@
-import {React, useEffect} from "react";
+import {React, useEffect, useState} from "react";
 import { useDispatch, useSelector} from "react-redux";
 import { useParams, Link} from "react-router-dom";
 import queryString from "query-string";
 import { addToCart, removeFromCart, addQuantity, substractQuantity} from "../reducers/cartReducer";
-
+import { useCookies } from 'react-cookie';
 
 function CartScreen(props){
-    const {id} = useParams();
-    const queryParams = queryString.parse(window.location.search);
-    const qty = Number(queryParams.qty);
+    // const {id} = useParams();
+    // const queryParams = queryString.parse(window.location.search);
+    // const qty = Number(queryParams.qty);
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cart);
     const {cartItems} = cart;
- 
+
 
     const removeFromCartHandler = (productId) => {
         dispatch(removeFromCart(productId));
@@ -28,11 +28,12 @@ function CartScreen(props){
         }
     }
 
-    useEffect(()=> {
-        const args = {id, qty};
-        console.log(args);
-        dispatch(addToCart(args));
-    }, [dispatch])
+    // useEffect(()=> {
+    //     // const args = {id, qty};
+    //     dispatch(addToCart(cookie.cart));
+    // }, [])
+
+
 
     return <div className="cart">
         <div className="cart-list">
