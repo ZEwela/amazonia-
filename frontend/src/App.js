@@ -17,7 +17,7 @@ function App() {
   const closeMenu = () => {
     document.querySelector(".sidebar").classList.remove("open");
   }
-  
+
   const cartItems = useSelector(state => state.cart.cartItems);
   const [cookies, setCookie] = useCookies(['cart']);
 
@@ -36,7 +36,7 @@ function App() {
                     <button onClick={openMenu}>
                         &#9776;
                     </button>
-                    <Link to="/">amazona</Link>
+                    <Link to="/">amazonia</Link>
                 </div>
                 <div className="header-links">
                     <a href="cart.html">Cart</a>
