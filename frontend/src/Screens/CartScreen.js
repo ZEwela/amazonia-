@@ -12,15 +12,19 @@ function CartScreen(props){
 
     const removeFromCartHandler = (productId) => {
         dispatch(removeFromCart(productId));
+        
     }
     const addQuantityHandler = (productId) => {
         dispatch(addQuantity(productId));
     }
     const substractQuantityHandler = (productId, qty) => {
-        if (qty > 1) {
-            dispatch(substractQuantity(productId));
-        } else {
+        
+        if (qty === 1) {
             dispatch(removeFromCart(productId));
+            
+        } else {
+            dispatch(substractQuantity(productId));
+            
         }
     }
 

@@ -6,6 +6,7 @@ import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
 import SigninScreen from './screens/SigninScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import ProductsScreen from './screens/ProductsScreen';
 import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCartFromCookie } from './reducers/cartReducer';
@@ -29,6 +30,7 @@ function App() {
 
   useEffect(() => {
     if (cartItems.length === 0 && cookies.cart !== undefined) {
+        if (cookies.cart) {return}
         dispatch(setCartFromCookie(cookies.cart))
     } else {
         setCookie('cart', cartItems, {path: '/', maxAge: 86400});
@@ -37,7 +39,6 @@ function App() {
 
   useEffect(() => {
     if (userInfo.length === 0  &&  cookies.user !== undefined) {
-        console.log(userInfo, cookies.user)
         dispatch(setUserFromCookie(cookies.user))
     } else {
         setCookie('user', userInfo, {path: '/', maxAge: 86400});
@@ -75,6 +76,7 @@ function App() {
             <main className="main">
                 <div className="content">
                     <Routes>
+                        <Route path="/products" element={<ProductsScreen/>}/>
                         <Route path="/register" element={<RegisterScreen/>}/>
                         <Route path="/signin" element={<SigninScreen/>} />
                         <Route path="/products/:id" element={<ProductScreen/>} />
