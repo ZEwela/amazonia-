@@ -1,3 +1,4 @@
 export default {
-    MONGODB_URL: process.env.MONGODB_URL || 'mongodb://localhost/amazonia'
+    MONGODB_URL: process.env.MONGODB_URL || 'mongodb://localhost/amazonia',
+    JWT_SECRET: process.env.JWT_SECRET || 'somethingsecret'
 }

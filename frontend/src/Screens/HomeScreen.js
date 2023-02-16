@@ -1,7 +1,7 @@
 import { React, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts } from '../reducers/productReducers';
+import { fetchProducts } from '../reducers/productReducer';
 
 function HomeScreen(props) {
 

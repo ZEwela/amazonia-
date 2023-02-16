@@ -4,9 +4,13 @@ import './App.css';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
+import SigninScreen from './screens/SigninScreen';
+import RegisterScreen from './screens/RegisterScreen';
 import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCartFromCookie } from './reducers/cartReducer';
+import {setUserFromCookie} from './reducers/userReducer';
+
 
 
 function App() {
@@ -17,17 +21,28 @@ function App() {
   const closeMenu = () => {
     document.querySelector(".sidebar").classList.remove("open");
   }
-
+  
+  const userInfo = useSelector(state => state.user.userInfo);
   const cartItems = useSelector(state => state.cart.cartItems);
-  const [cookies, setCookie] = useCookies(['cart']);
+  const [cookies, setCookie] = useCookies(['cart', 'user']);
+
 
   useEffect(() => {
     if (cartItems.length === 0 && cookies.cart !== undefined) {
         dispatch(setCartFromCookie(cookies.cart))
     } else {
-        setCookie('cart', cartItems);
+        setCookie('cart', cartItems, {path: '/', maxAge: 86400});
     }
   }, [cartItems]);
+
+  useEffect(() => {
+    if (userInfo.length === 0  &&  cookies.user !== undefined) {
+        console.log(userInfo, cookies.user)
+        dispatch(setUserFromCookie(cookies.user))
+    } else {
+        setCookie('user', userInfo, {path: '/', maxAge: 86400});
+    }
+  }, [userInfo]);
 
   return (
         <div className="grid-container">
@@ -39,8 +54,12 @@ function App() {
                     <Link to="/">amazonia</Link>
                 </div>
                 <div className="header-links">
-                    <a href="cart.html">Cart</a>
-                    <a href="signin.html">Sign In</a>
+                    <Link to="/cart">Cart</Link>
+                    {
+                        userInfo.length > 0 ? <Link to="/profile">{userInfo[0].name}</Link> 
+                        :
+                        <Link to="/signin">Sign-In</Link>
+                    }
                 </div>
             </header>
             <aside className="sidebar">
@@ -56,6 +75,8 @@ function App() {
             <main className="main">
                 <div className="content">
                     <Routes>
+                        <Route path="/register" element={<RegisterScreen/>}/>
+                        <Route path="/signin" element={<SigninScreen/>} />
                         <Route path="/products/:id" element={<ProductScreen/>} />
                         <Route path="/cart/:id?" element={<CartScreen/>} />
                         <Route path="/" exact={true} element={<HomeScreen/>} />   

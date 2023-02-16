@@ -5,7 +5,8 @@ import cors from 'cors';
 import config from './config';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import userRoute from "./routes/userRoute"
+import userRoute from "./routes/userRoute";
+import bodyParser from 'body-parser';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ mongoose.connect(mongodbUrl, {
 
 const port = process.env.PORT || 5000;
 const app = express();
+app.use(bodyParser.json());
 app.use(cors());
 
 app.use("/api/users", userRoute);
