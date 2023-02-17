@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from './config';
+const sanitize = require("mongo-sanitize");
 
 const getToken = (user) => {
     return jwt.sign({
@@ -37,3 +38,8 @@ const isAdmin =  (req, res, next) => {
 }
 
 export {getToken, isAuth, isAdmin};
+
+export const cleanBody = (req, res, next) => {
+    req.body = sanitize(req.body);
+    next();
+}

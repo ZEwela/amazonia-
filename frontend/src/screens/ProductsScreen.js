@@ -25,7 +25,6 @@ function ProductsScreen(props) {
         loadingDelete, errorDelete, successDelete,
     } = productList;
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (successCreate) {
@@ -34,6 +33,7 @@ function ProductsScreen(props) {
         dispatch(fetchProducts());
         return () => {
         };
+
     },[successCreate, successDelete])
 
     const openModel = (product) => {
@@ -74,49 +74,49 @@ function ProductsScreen(props) {
                         </li>
                         <li>
                             {loadingCreate && <div>Loading...</div>}
-                            {errorCreate && <div>{error}</div>}
+                            {errorCreate && <div>{errorCreate}</div>}
                         </li>
                         <li>
                             <label htmlFor="name">
                                 Name
                             </label>
-                            <input type="name" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)}/>
+                            <input type="name" name="name" id="name" value={name || ''} required={true} onChange={(e) => setName(e.target.value)}/>
                         </li>
                         <li>
                             <label htmlFor="price">
                                 Price
                             </label>
-                            <input type="price" name="price" id="price" value={price} onChange={(e)=>setPrice(e.target.value)}/>
+                            <input type="number" name="price" id="price" value={price || ''} min="1" required={true} onChange={(e)=>setPrice(e.target.value)}/>
                         </li>
                         <li>
                             <label htmlFor="image">
                                 Image
                             </label>
-                            <input  name="image" id="image" value={image} onChange={(e)=>setImage(e.target.value)}/>
+                            <input  name="image" id="image" value={image || ''} required={true}  onChange={(e)=>setImage(e.target.value)}/>
                         </li>
                         <li>
                             <label htmlFor="brand">
                                 Brand
                             </label>
-                            <input type="brand" name="brand" id="brand" value={brand} onChange={(e)=>setBrand(e.target.value)}/>
+                            <input type="text" name="brand" id="brand" value={brand || ''} required={true}  onChange={(e)=>setBrand(e.target.value)}/>
                         </li>
                         <li>
                             <label htmlFor="category">
                                 Category
                             </label>
-                            <input type="category" name="category" id="category" value={category} onChange={(e)=>setCategory(e.target.value)}/>
+                            <input type="text" name="category" id="category" value={category || ''} required={true}  onChange={(e)=>setCategory(e.target.value)}/>
                         </li>
                         <li>
                             <label htmlFor="description">
                                 Description
                             </label>
-                            <textarea name="description" id="description"  value={description} onChange={(e)=>setDescription(e.target.value)}></textarea>
+                            <textarea name="text" id="description"  value={description || ''} required={true}  onChange={(e)=>setDescription(e.target.value)}></textarea>
                         </li>
                         <li>
                             <label htmlFor="countInStock">
                                 Count In Stock
                             </label>
-                            <input type="countInStock" name="countInStock" id="countInStock" value={countInStock} onChange={(e)=>setCountInStock(e.target.value)}/>
+                            <input type="number" name="countInStock" min="1" id="countInStock" value={countInStock || ''} required  onChange={(e)=>setCountInStock(e.target.value)}/>
                         </li>
                         <li>
                             <button type="submit" className="button primary">{id?"Edit":"Create"}</button>

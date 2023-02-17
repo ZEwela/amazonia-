@@ -45,6 +45,8 @@ function App() {
     }
   }, [userInfo]);
 
+  const isAdmin = (userInfo.length > 0 && userInfo[0].isAdmin === true) ? true : false;
+
   return (
         <div className="grid-container">
             <header className="header">
@@ -55,6 +57,9 @@ function App() {
                     <Link to="/">amazonia</Link>
                 </div>
                 <div className="header-links">
+                    {
+                        isAdmin && <Link to="/products">Products</Link>
+                    }
                     <Link to="/cart">Cart</Link>
                     {
                         userInfo.length > 0 ? <Link to="/profile">{userInfo[0].name}</Link> 

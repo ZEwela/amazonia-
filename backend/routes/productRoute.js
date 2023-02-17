@@ -22,16 +22,29 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", isAuth, isAdmin,  async (req, res) => {
-    const product = new Product({
-        name: req.body.name,
-        image: req.body.image,
-        brand: req.body.brand,
-        price: req.body.price,
-        category: req.body.category,
-        countInStock: req.body.countInStock,
-        description: req.body.description,
-    });
-    const newProduct = await product.save();
+    let newProduct;
+    try { 
+        const product = new Product({
+            name: req.body.name,
+            image: req.body.image,
+            brand: req.body.brand,
+            price: req.body.price,
+            category: req.body.category,
+            countInStock: req.body.countInStock,
+            description: req.body.description,
+        });
+        newProduct = await product.save();
+    } catch (error) {
+        if (error.name === "ValidationError") {
+            let errors = {};
+      
+            Object.keys(error.errors).forEach((key) => {
+              errors[key] = error.errors[key].message;
+            });
+      
+            return res.status(400).send({message: errors});
+        }
+    }
     if (newProduct) {
         return res.status(201).send({message: 'New Product Created', data: newProduct});
     }

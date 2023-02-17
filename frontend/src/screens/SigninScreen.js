@@ -47,7 +47,7 @@ function SigninScreen(props) {
                      <label htmlFor="password">
                         Password
                     </label>
-                    <input type="password" name="password" id="password" onChange={(e)=>setPassword(e.target.value)}/>
+                    <input type="password" name="password" id="password" minLength="8" maxLength="34" onChange={(e)=>setPassword(e.target.value)}/>
                 </li>
                 <li>
                     <button type="submit" className="button primary">Signin</button>

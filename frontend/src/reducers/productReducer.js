@@ -13,7 +13,7 @@ export const fetchProductById = createAsyncThunk('productList/fetchProductById',
     return data;
 })
 
-export const createProduct = createAsyncThunk('productList/createProduct', async (args) => {
+export const createProduct = createAsyncThunk('productList/createProduct', async (args, {rejectWithValue}) => {
     const token = args.token;
     const product = args.product;
     if (product.id) {
@@ -24,12 +24,17 @@ export const createProduct = createAsyncThunk('productList/createProduct', async
         });
         return data;
     } else {
-        const {data} = await axios.post("/api/products", product, {
-            headers: {
-                'Authorization': 'Bearer ' + token 
-            }
-        });
-        return data;
+        try {        
+            const {data} = await axios.post("/api/products", product, {
+                headers: {
+                    'Authorization': 'Bearer ' + token 
+                }
+            })
+            return data;
+        } catch (error) {
+            const errors = error.response.data.message
+            return  rejectWithValue(errors)
+        }
     }
 })
 
@@ -85,6 +90,7 @@ const productListSlice = createSlice({
     })
     builder.addCase(createProduct.pending, state => {
         state.loadingCreate = true;
+        state.successCreate = false;
     })
     builder.addCase(createProduct.fulfilled, (state, action) => {
         state.loadingCreate = false;
@@ -94,11 +100,12 @@ const productListSlice = createSlice({
     })
     builder.addCase(createProduct.rejected, (state, action) => {
         state.loadingCreate = false;
-        state.errorCreate = action.error.message;
+        state.errorCreate = action.payload;
         state.successCreate = false;
     })
     builder.addCase(deleteProduct.pending, state => {
         state.loadingDelete = true;
+        state.successDelete = false;
     })
     builder.addCase(deleteProduct.fulfilled, (state) => {
         state.loadingDelete = false;
