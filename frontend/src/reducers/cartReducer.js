@@ -22,24 +22,35 @@ const cartSlice = createSlice({
         loading: false,
         cartItems: [],
         error: null,
+        shipping: {},
+        payment: {},
     },
     reducers: {
         removeFromCart: (state, action) => {
             const removeItem = current(state).cartItems.filter(x => x.product !== action.payload);
             state.cartItems = removeItem;
+            localStorage.setItem('cart', JSON.stringify(state.cartItems))
         },
         addQuantity: (state, action) => {
             const item = current(state).cartItems.findIndex(x => x.product === action.payload);
             if (current(state).cartItems[item].qty < current(state).cartItems[item].countInStock){
                 state.cartItems[item].qty++;
             }  
+            localStorage.setItem('cart', JSON.stringify(state.cartItems))
         },
         substractQuantity: (state, action) => {
             const item = current(state).cartItems.findIndex(x => x.product === action.payload);
             state.cartItems[item].qty--;
+            localStorage.setItem('cart', JSON.stringify(state.cartItems))
         },
         setCartFromCookie: (state, action) => {
             state.cartItems = action.payload
+        },
+        saveShipping: (state, action) => {
+            state.shipping = action.payload
+        },
+        savePayment: (state, action) => {
+            state.payment = action.payload
         },
     },
     extraReducers: builder => {
@@ -56,6 +67,7 @@ const cartSlice = createSlice({
             } else {
                 state.cartItems.push(item);
             }
+            localStorage.setItem('cart', JSON.stringify(state.cartItems))
         })
         builder.addCase(addToCart.rejected, (state, action) => {
             state.loading = false;
@@ -65,4 +77,8 @@ const cartSlice = createSlice({
 })
 
 export default cartSlice.reducer;
-export const {removeFromCart, addQuantity, substractQuantity, setCartFromCookie} = cartSlice.actions;
+export const {
+    removeFromCart, addQuantity, 
+    substractQuantity, setCartFromCookie,
+    saveShipping, savePayment,
+} = cartSlice.actions;

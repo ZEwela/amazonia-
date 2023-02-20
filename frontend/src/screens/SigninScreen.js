@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { signin } from "../reducers/userReducer";
-
-
 
 function SigninScreen(props) {
     const [email, setEmail] = useState('');
@@ -12,10 +10,12 @@ function SigninScreen(props) {
     const {loading, error, userInfo} = user;
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const location = useLocation();
+    const redirect = location.search?location.search.split("=")[1]:'/'; 
+    console.log('redirect', redirect)
     useEffect(() => {
         if (userInfo.length > 0){
-            navigate("/");
+            navigate(`/${redirect}`);
         }
         return () => {
         };
@@ -56,7 +56,7 @@ function SigninScreen(props) {
                     New to amazonia?
                 </li>
                 <li>
-                    <Link to="/register" className="button secondary text-center">Create your amazonia account</Link>
+                    <Link to={redirect === "/" ? "/register" : "/register?redirect=" + redirect} className="button secondary text-center">Create your amazonia account</Link>
                 </li>
             </ul>
         </form>

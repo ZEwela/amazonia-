@@ -7,10 +7,14 @@ import CartScreen from './screens/CartScreen';
 import SigninScreen from './screens/SigninScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProductsScreen from './screens/ProductsScreen';
+import ShippingScreen from './screens/ShippingScreen';
+import PaymentScreen from './screens/PaymentScreen';
+import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCartFromCookie } from './reducers/cartReducer';
 import {setUserFromCookie} from './reducers/userReducer';
+
+
 
 
 
@@ -24,18 +28,8 @@ function App() {
   }
   
   const userInfo = useSelector(state => state.user.userInfo);
-  const cartItems = useSelector(state => state.cart.cartItems);
-  const [cookies, setCookie] = useCookies(['cart', 'user']);
+  const [cookies, setCookie] = useCookies([ 'user']);
 
-
-  useEffect(() => {
-    if (cartItems.length === 0 && cookies.cart !== undefined) {
-        if (cookies.cart) {return}
-        dispatch(setCartFromCookie(cookies.cart))
-    } else {
-        setCookie('cart', cartItems, {path: '/', maxAge: 86400});
-    }
-  }, [cartItems]);
 
   useEffect(() => {
     if (userInfo.length === 0  &&  cookies.user !== undefined) {
@@ -81,6 +75,9 @@ function App() {
             <main className="main">
                 <div className="content">
                     <Routes>
+                        <Route path="/shipping" element={<ShippingScreen/>}/>
+                        <Route path="/payment" element={<PaymentScreen/>}/>
+                        <Route path="/placeOrder" element={<PlaceOrderScreen/>}/>
                         <Route path="/products" element={<ProductsScreen/>}/>
                         <Route path="/register" element={<RegisterScreen/>}/>
                         <Route path="/signin" element={<SigninScreen/>} />

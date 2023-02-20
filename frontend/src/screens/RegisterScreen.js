@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { register } from "../reducers/userReducer";
 
 function RegisterScreen(props) {
@@ -12,10 +12,12 @@ function RegisterScreen(props) {
     const {loading, error, userInfo} = user;
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
+    const redirect = location.search?location.search.split("=")[1]:'/'; 
 
     useEffect(() => {
         if (userInfo.length > 0){
-            navigate("/");
+            navigate(`/${redirect}`);
         }
         return () => {
         };
@@ -68,7 +70,7 @@ function RegisterScreen(props) {
                     Already have amazonia account?
                 </li>
                 <li>
-                    <Link to="/signin" className="button secondary text-center">Sign-in</Link>
+                    <Link to={redirect === "/" ? "/signin" : "/signin?redirect=" + redirect} className="button secondary text-center">Sign-in</Link>
                 </li>
             </ul>
         </form>

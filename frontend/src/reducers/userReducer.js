@@ -34,7 +34,6 @@ const userSlice = createSlice({
         state.loading = false;
         state.userInfo.push(action.payload);
         state.error = null;
-        console.log('from reducr userInfo just set', state.userInfo)
     })
     builder.addCase(signin.rejected, (state, action) => {
         state.loading = false;
