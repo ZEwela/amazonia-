@@ -306,7 +306,7 @@ tbody>tr:nth-child(odd){
 /* Checout Steps */
 .checkout-steps{
   display: flex;
-  width: 40rem;
+  width: 95%;
   justify-content: space-between;
   margin: 1rem auto;
 }

@@ -3,18 +3,34 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { addToCart } from '../reducers/cartReducer';
 import {fetchProductById} from '../reducers/productReducer';
+import { setCartFromCookie } from '../reducers/cartReducer';
 
 
 
 function ProductScreen(props) {
-    const [qty, setQty] = useState(1);
     const dispatch = useDispatch();
-    const {id} = useParams();
-    const productList = useSelector(state => state.productList);
-    const {product, loading, error} = productList;
     const navigate = useNavigate();
+    const {id} = useParams();
 
+    const [qty, setQty] = useState(1);
 
+    const productList = useSelector(state => state.productList);
+    const cartItems = useSelector(state => state.cart.cartItems);
+
+    const {product, loading, error} = productList;
+
+    useEffect(() => {
+        if (cartItems.length === 0 && localStorage.getItem('cart')) {
+            dispatch(setCartFromCookie(JSON.parse(localStorage.getItem('cart'))));
+        }
+    }, [])
+
+    const indexOfProductInCart = cartItems.findIndex(x => x.product === id);
+    const amountToSell = indexOfProductInCart === -1 ? 
+        product.countInStock
+        :
+        product.countInStock - cartItems[indexOfProductInCart].qty ;
+  
     
     useEffect(() => {
         dispatch(fetchProductById(id));
@@ -28,6 +44,7 @@ function ProductScreen(props) {
     } 
 
     const handleAddToCart = (id, qty) => {
+        qty = Number(qty);
         dispatch(addToCart({id, qty}))
        navigate('/cart/');
     }
@@ -69,18 +86,23 @@ function ProductScreen(props) {
                             Price: ${product.price}
                         </li>
                         <li>
-                            Status: {product.countInStock > 0? "In Stock" : "Out of stock"}
+                            Status: {amountToSell > 0 ? "In Stock" : "Out of stock"}
                         </li>
+                        {
+                        (amountToSell > 0) && 
+                        <>
                         <li>
                             Qty: <select value={qty} onChange={(e) => {setQty(e.target.value)}}>
-                                {[...Array(maxQty(product.countInStock)).keys()].map(x=>
+                                {[...Array(maxQty(amountToSell)).keys()].map(x=>
                                     <option key={x+1} value={x+1}>{x+1}</option>
                                 )}
                             </select>
                         </li>
                         <li>
-                            {product.countInStock > 0 && <button onClick={() => handleAddToCart(product._id, qty)} className="button primary">Add to cart</button>}
+                             <button onClick={() => handleAddToCart(product._id, qty)} className="button primary">Add to cart</button>
                         </li>
+                        </>
+                        }
                     </ul>
                 </div>
             </div>

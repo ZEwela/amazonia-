@@ -36,6 +36,7 @@ function CartScreen(props){
             dispatch(removeFromCart(productId)); 
         } else {
             dispatch(substractQuantity(productId));  
+
         }
     }
 
@@ -64,7 +65,7 @@ function CartScreen(props){
                         </div>
                         <div className="cart-name">
                             <div>
-                                <Link to={`/api/product/${item.product}`}>
+                                <Link to={`/products/${item.product}`}>
                                     {item.name}
                                 </Link>
                             </div>

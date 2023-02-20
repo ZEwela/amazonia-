@@ -72,7 +72,7 @@ function PlaceOrderScreen(props){
                                 </div>
                                 <div className="cart-name">
                                     <div>
-                                        <Link to={`/api/product/${item.product}`}>
+                                        <Link to={`/products/${item.product}`}>
                                             {item.name}
                                         </Link>
                                     </div>
