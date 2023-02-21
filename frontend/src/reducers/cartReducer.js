@@ -47,7 +47,7 @@ const cartSlice = createSlice({
             state.cartItems = action.payload
         },
         saveShipping: (state, action) => {
-            state.shipping = action.payload
+            state.shipping = action.payload;
         },
         savePayment: (state, action) => {
             state.payment = action.payload

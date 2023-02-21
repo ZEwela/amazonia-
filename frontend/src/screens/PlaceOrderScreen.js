@@ -43,11 +43,19 @@ function PlaceOrderScreen(props){
                         {cart.shipping.address}, {cart.shipping.city},
                         {cart.shipping.postalCode}, {cart.shipping.country},
                     </div>
+                    <br/>
+                    <div>
+                        <Link to="/shipping">edit</Link>
+                    </div>
                 </div>
                 <div>
                     <h3>Payment</h3>
                     <div>
                         Payment Method: {cart.payment.paymentMethod}
+                    </div>
+                    <br/>
+                    <div>
+                        <Link to="/payment">edit</Link>
                     </div>
                 </div> 
                 <div>
@@ -85,7 +93,11 @@ function PlaceOrderScreen(props){
                                 </div>
                             </li>
                             )
-                         } 
+                        }
+                        <br/>
+                        <div>
+                            <Link to="/cart">edit</Link>
+                        </div> 
                     </ul> 
                 </div>
             </div>

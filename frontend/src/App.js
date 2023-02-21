@@ -1,4 +1,4 @@
-import {React, useEffect} from 'react';
+import { React, useEffect } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
 import './App.css';
 import HomeScreen from './screens/HomeScreen';
@@ -11,12 +11,7 @@ import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import { useDispatch, useSelector } from 'react-redux';
-import {setUserFromCookie, signout} from './reducers/userReducer';
-
-
-
-
-
+import { setUserFromCookie, signout } from './reducers/userReducer';
 
 function App() {
   const dispatch = useDispatch();
@@ -28,7 +23,6 @@ function App() {
   }
   
   const userInfo = useSelector(state => state.user.userInfo);
-
 
   useEffect(() => {
     if (userInfo.length === 0 && localStorage.getItem('user')) {
