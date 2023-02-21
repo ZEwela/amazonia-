@@ -27,6 +27,7 @@ const userSlice = createSlice({
     },
   },
   extraReducers: builder => {
+    // SIGNIN
     builder.addCase(signin.pending, state => {
         state.loading = true;
     })
@@ -39,18 +40,19 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
     })
+    // REGISTER
     builder.addCase(register.pending, state => {
       state.loading = true;
-  })
-  builder.addCase(register.fulfilled, (state, action) => {
+    })
+    builder.addCase(register.fulfilled, (state, action) => {
       state.loading = false;
       state.userInfo.push(action.payload);
       state.error = null;
-  })
-  builder.addCase(register.rejected, (state, action) => {
+    })
+    builder.addCase(register.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
-  })
+    })
   }
 });
 
