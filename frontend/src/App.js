@@ -10,9 +10,9 @@ import ProductsScreen from './screens/ProductsScreen';
 import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
-import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
-import {setUserFromCookie} from './reducers/userReducer';
+import {setUserFromCookie, signout} from './reducers/userReducer';
+
 
 
 
@@ -28,16 +28,17 @@ function App() {
   }
   
   const userInfo = useSelector(state => state.user.userInfo);
-  const [cookies, setCookie] = useCookies([ 'user']);
 
 
   useEffect(() => {
-    if (userInfo.length === 0  &&  cookies.user !== undefined) {
-        dispatch(setUserFromCookie(cookies.user))
-    } else {
-        setCookie('user', userInfo, {path: '/', maxAge: 86400});
+    if (userInfo.length === 0 && localStorage.getItem('user')) {
+        dispatch(setUserFromCookie(JSON.parse(localStorage.getItem('user'))));
     }
-  }, [userInfo]);
+  }, []);
+
+  const signoutHandler = () => {
+    dispatch(signout())
+  }
 
   const isAdmin = (userInfo.length > 0 && userInfo[0].isAdmin === true) ? true : false;
 
@@ -56,7 +57,11 @@ function App() {
                     }
                     <Link to="/cart">Cart</Link>
                     {
-                        userInfo.length > 0 ? <Link to="/profile">{userInfo[0].name}</Link> 
+                        userInfo.length > 0 ? 
+                        <>
+                        <Link to="/profile">{userInfo[0].name}</Link>
+                        <Link onClick={signoutHandler}>Sign-out</Link>
+                        </>
                         :
                         <Link to="/signin">Sign-In</Link>
                     }

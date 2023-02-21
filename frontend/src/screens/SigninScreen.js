@@ -11,8 +11,7 @@ function SigninScreen(props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
-    const redirect = location.search?location.search.split("=")[1]:'/'; 
-    console.log('redirect', redirect)
+    const redirect = location.search?location.search.split("=")[1]:''; 
     useEffect(() => {
         if (userInfo.length > 0){
             navigate(`/${redirect}`);
