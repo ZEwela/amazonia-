@@ -10,6 +10,7 @@ import ProductsScreen from './screens/ProductsScreen';
 import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
+import OrderScreen from './screens/OrderScreen';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserFromCookie, signout } from './reducers/userReducer';
 
@@ -82,6 +83,7 @@ function App() {
                         <Route path="/signin" element={<SigninScreen/>} />
                         <Route path="/products/:id" element={<ProductScreen/>} />
                         <Route path="/cart/:id?" element={<CartScreen/>} />
+                        <Route path="/orders/:id" element={<OrderScreen/>} />
                         <Route path="/" exact={true} element={<HomeScreen/>} />   
                     </Routes>
                 </div>

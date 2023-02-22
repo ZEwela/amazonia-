@@ -106,6 +106,7 @@ const cartSlice = createSlice({
             state.error = null;
             state.order = action.payload;
             localStorage.removeItem('cart');
+            state.cartItems = [];
         })
         builder.addCase(placeOrder.rejected, (state, action) => {
             state.loading = false;

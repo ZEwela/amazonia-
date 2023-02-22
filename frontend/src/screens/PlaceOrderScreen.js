@@ -10,7 +10,9 @@ function PlaceOrderScreen(props){
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const {cartItems, shipping, payment} = useSelector(state => state.cart);
-    const token = useSelector(state => state.user.userInfo[0].token);
+    
+    let token = null;
+    const user = useSelector(state => state.user);
     const order = useSelector(state => state.cart.order);
 
     const itemsPrice = cartItems.reduce((a,c) => a + c.price * c.qty, 0);
@@ -19,6 +21,7 @@ function PlaceOrderScreen(props){
     const totalPrice = itemsPrice + shippingPrice + taxPrice;
 
     const placeOrderHandler = () => {
+        token = user.userInfo[0].token;
         const args = {
             cartItems, shipping, payment, 
             itemsPrice, shippingPrice, taxPrice, 
@@ -38,7 +41,7 @@ function PlaceOrderScreen(props){
         }
     }, [])
     useEffect(() => {
-        if (order.order._id){
+        if (order.order){
             navigate(`/orders/${order.order._id}`)
         }
     }, [order])

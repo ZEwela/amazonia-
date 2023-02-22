@@ -5,6 +5,12 @@ import expressAsyncHandler from 'express-async-handler';
 
 const router = express.Router();
 
+router.get('/:id', isAuth, expressAsyncHandler(async (req, res) => {
+    const orderId = req.params.id;
+    const order = await Order.findById(orderId);
+    res.send(order);
+}));
+
 router.post('/', isAuth, expressAsyncHandler(async (req, res) => {
     const newOrder = new Order({
         orderItems: req.body.orderItems,

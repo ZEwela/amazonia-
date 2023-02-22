@@ -18,7 +18,6 @@ router.get("/:id", async (req, res) => {
     } else {
         res.status(404).send({message: 'Product Not Found'})
     }
-
 });
 
 router.post("/", isAuth, isAdmin,  async (req, res) => {
