@@ -6,9 +6,12 @@ import expressAsyncHandler from 'express-async-handler';
 const router = express.Router();
 
 router.get('/:id', isAuth, expressAsyncHandler(async (req, res) => {
-    const orderId = req.params.id;
-    const order = await Order.findById(orderId);
-    res.send(order);
+    const order = await Order.findById(req.params.id);
+    if (order){
+        res.send(order);
+    } else {
+        res.status(404).send({message: 'Order Not Found'});
+    } 
 }));
 
 router.post('/', isAuth, expressAsyncHandler(async (req, res) => {

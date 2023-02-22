@@ -362,3 +362,26 @@ tbody>tr:nth-child(odd){
   font-weight: bold;
   color: #c04000;
 }
+
+/* Order Screen */
+.order-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 2rem;
+}
+.success-info{
+  color: rgb(18, 79, 27);
+  background-color: #aadda2;
+  border: 0.1rem #c0c0c0 solid;
+  border-radius: .5%;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+.failure-info{
+  color: rgb(107, 15, 15);
+  background-color: #dda2ab;
+  border: 0.1rem #c0c0c0 solid;
+  border-radius: .5%;
+  padding: 1rem;
+  margin: 1rem 0;
+}
