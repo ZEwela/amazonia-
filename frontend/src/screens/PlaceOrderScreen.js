@@ -2,34 +2,46 @@ import { React, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import CheckoutSteps from "../components/CheckoutSteps";
-import { setCartFromCookie } from '../reducers/cartReducer';
+import { setCartFromCookie, placeOrder } from '../reducers/cartReducer';
 
 
 
 function PlaceOrderScreen(props){
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const cart = useSelector(state => state.cart);
+    const {cartItems, shipping, payment} = useSelector(state => state.cart);
+    const token = useSelector(state => state.user.userInfo[0].token);
+    const order = useSelector(state => state.cart.order);
 
-    const itemsPrice = cart.cartItems.reduce((a,c) => a + c.price * c.qty, 0);
+    const itemsPrice = cartItems.reduce((a,c) => a + c.price * c.qty, 0);
     const shippingPrice = itemsPrice > 100 ? 0 : 10;
     const taxPrice = 0.15 * itemsPrice;
     const totalPrice = itemsPrice + shippingPrice + taxPrice;
 
     const placeOrderHandler = () => {
-
+        const args = {
+            cartItems, shipping, payment, 
+            itemsPrice, shippingPrice, taxPrice, 
+            totalPrice, token 
+        }
+        dispatch(placeOrder(args));
     }
 
     useEffect(() => {
-        if (!cart.shipping.address){
+        if (!shipping.address){
             navigate("/shipping");
-        } else if (!cart.payment.paymentMethod) {
+        } else if (!payment.paymentMethod) {
             navigate("/payment");
         }
-        if (cart.cartItems.length === 0 && localStorage.getItem('cart')) {
+        if (cartItems.length === 0 && localStorage.getItem('cart')) {
             dispatch(setCartFromCookie(JSON.parse(localStorage.getItem('cart'))));
         }
     }, [])
+    useEffect(() => {
+        if (order.order._id){
+            navigate(`/orders/${order.order._id}`)
+        }
+    }, [order])
 
     return <div>
         <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
@@ -40,8 +52,9 @@ function PlaceOrderScreen(props){
                         Shipping
                     </h3>
                     <div>
-                        {cart.shipping.address}, {cart.shipping.city},
-                        {cart.shipping.postalCode}, {cart.shipping.country},
+                        {shipping.fullName},
+                        {shipping.address}, {shipping.city},
+                        {shipping.postalCode}, {shipping.country},
                     </div>
                     <br/>
                     <div>
@@ -51,7 +64,7 @@ function PlaceOrderScreen(props){
                 <div>
                     <h3>Payment</h3>
                     <div>
-                        Payment Method: {cart.payment.paymentMethod}
+                        Payment Method: {payment.paymentMethod}
                     </div>
                     <br/>
                     <div>
@@ -68,12 +81,12 @@ function PlaceOrderScreen(props){
                                 Price
                             </div>
                         </li>
-                        {cart.cartItems.length === 0 ?
+                        {cartItems.length === 0 ?
                         <div>
                             Cart is empty
                         </div>
                         :
-                        cart.cartItems.map(item => 
+                        cartItems.map(item => 
                             <li key={item.product}>
                                 <div className="cart-image">
                                     <img src={item.image} alt={item.name}/>
@@ -104,7 +117,7 @@ function PlaceOrderScreen(props){
             <div className="placeorder-action">
                 <ul>
                     <li>
-                        <button className="button primary full-width" onClick={placeOrderHandler}>PlaceOrder</button>
+                        <button className="button primary full-width" onClick={placeOrderHandler}>Place Order</button>
                     </li>
                     <li>
                         <h3>Order Summary</h3>

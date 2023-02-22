@@ -16,6 +16,27 @@ export const addToCart = createAsyncThunk('cart/addToCart', async(args) => {
     }
 })
 
+export const placeOrder = createAsyncThunk('cart/placeOrder', async(args) => {
+    const {cartItems, shipping, payment, itemsPrice, shippingPrice, taxPrice, totalPrice, token} = args;
+    const {data} = await axios.post('/api/orders', 
+        {
+            orderItems: cartItems,
+            shippingAddress: shipping,
+            paymentMethod: payment.paymentMethod,
+            itemsPrice: itemsPrice,
+            shippingPrice: shippingPrice,
+            taxPrice: taxPrice,
+            totalPrice: totalPrice,
+        },
+        {
+            headers: {
+                authorization: `Bearer ${token}`
+            },
+        }
+    )
+    return data;
+})
+
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
@@ -24,6 +45,8 @@ const cartSlice = createSlice({
         error: null,
         shipping: {},
         payment: {},
+        order: {},
+        orders: []
     },
     reducers: {
         removeFromCart: (state, action) => {
@@ -54,6 +77,7 @@ const cartSlice = createSlice({
         },
     },
     extraReducers: builder => {
+        // ADD TO CART
         builder.addCase(addToCart.pending, state => {
             state.loading = true;
         })
@@ -70,6 +94,20 @@ const cartSlice = createSlice({
             localStorage.setItem('cart', JSON.stringify(state.cartItems))
         })
         builder.addCase(addToCart.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        }) 
+        // PLACE ORDER
+        builder.addCase(placeOrder.pending, state => {
+            state.loading = true;
+        })
+        builder.addCase(placeOrder.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = null;
+            state.order = action.payload;
+            localStorage.removeItem('cart');
+        })
+        builder.addCase(placeOrder.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message;
         }) 

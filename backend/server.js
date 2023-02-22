@@ -6,9 +6,11 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import userRoutes from "./routes/userRoutes";
 import productRoutes from "./routes/productRoutes";
+import orderRoutes from "./routes/orderRoutes";
 import seedRoutes from "./routes/seedRoutes";
 import bodyParser from 'body-parser';
 import { cleanBody } from './utils';
+const helmet = require("helmet");
 const port = process.env.PORT || 5000;
 
 dotenv.config();
@@ -25,10 +27,12 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use(cleanBody);
+app.use(helmet());
 
 app.use("/api/seed", seedRoutes );
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.use((err, req, res, next) => {
     res.status(500).send({ message: err.message});
