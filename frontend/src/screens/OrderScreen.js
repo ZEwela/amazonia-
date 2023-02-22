@@ -1,22 +1,79 @@
-import { React, useEffect} from "react";
+import { React, useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getOrder } from "../reducers/orderReducer";
+import { getOrder, loadPaypalScript, onApprovePayPal } from "../reducers/orderReducer";
+import { PayPalButtons, PayPalScriptProvider, usePayPalScriptReducer} from '@paypal/react-paypal-js';
+
 
 
 
 function OrderScreen(props){
     const orderId = useParams().id;
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const {loading, error, orderInfo} = useSelector(state => state.order);
+    const payPalClientId = useSelector(state => state.order.payPalClientId);
+ 
+    // const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+    const [success, setSuccess] = useState(false);
+    const [ErrorMessage, setErrorMessage] = useState("");
+    const [orderID, setOrderID] = useState(false);
 
+    // creates a paypal order
+    const createOrder = (data, actions) => {
+        return actions.order.create({
+            purchase_units: [
+                {
+                    description: `amazonia-order-${orderInfo._id}`,
+                    amount: {
+                        currency_code: "USD",
+                        value: orderInfo.totalPrice,
+                    },
+                },
+            ],
+        }).then((orderID) => {
+                setOrderID(orderID);
+                return orderID;
+            });
+    };
+    
+    // check Approval
+    const onApprove = (data, actions) => { 
+        return actions.order.capture().then( function (details) {
+             dispatch(onApprovePayPal({orderId, details}))
+            setSuccess(true);
+            navigate(`/orders/${orderId}`);
+        });
+    };
 
+    //capture likely error
+    const onError = (data, actions) => {
+        setErrorMessage("An Error occured with your payment ");
+    };
 
     useEffect(() => {
         dispatch(getOrder({ orderId}));  
     }, []); 
 
+    useEffect(() => {
+        dispatch(loadPaypalScript());
+    }, [])
+
+
+
+
+    const options = {
+        "client-id": payPalClientId,
+    };
+    useEffect(() => {
+        if (success) {
+            navigate(`/orders/${orderId}`);
+        }
+    },[success]);
+
     return (
+        console.log(payPalClientId),
+  
         loading ? <div>Loading...</div> :
         error ? <div>{error}</div> :
         <div>
@@ -119,10 +176,26 @@ function OrderScreen(props){
                         <div>Order Total</div>
                         <div>${orderInfo.totalPrice}</div>
                     </li>
+                    <li>
+                        <div>
+                        {/* {isPending ? <div className="spinner" /> : null} */}
+                        <PayPalScriptProvider options={options}>
+                        {!orderInfo.isPaid && (
+                        <PayPalButtons
+                        style={{ layout: "vertical" }}
+                        createOrder={createOrder}
+                        onApprove={onApprove}
+                        onError={onError}
+                        /> )}
+                        </PayPalScriptProvider>
+                        </div>
+                    </li>
                 </ul> 
+
             </div>
         </div>
     </div> 
+
 )}
 
 export default OrderScreen;

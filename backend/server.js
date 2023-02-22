@@ -29,6 +29,10 @@ app.use(cors());
 app.use(cleanBody);
 app.use(helmet());
 
+app.get('/api/keys/paypal', (req, res) => {
+    res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
+});
+
 app.use("/api/seed", seedRoutes );
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
